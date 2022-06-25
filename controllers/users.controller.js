@@ -1,23 +1,22 @@
 const db = require("../models");
-const Products = db.products;
+const Users = db.users;
 
 exports.create = (req, res) => {
-    const { name, type, description } = req.body;
-    if (!(name && type)) {
+    const { loginName, password } = req.body;
+    if (!(loginName && password)) {
         res.status(400).send({
-            message: "name and Type are required"
+            message: "loginName and password are required"
         });
 
         return;
     }
 
-    const product = {
-        name,
-        type,
-        description,
+    const user = {
+        loginName,
+        password,
     };
 
-    Products.create(product)
+    Users.create(user)
     .then(res => res.status(200).send(data))
     .catch(err => res.status(500).send({
         message: err.message || "something wen't wrong, please try again."
@@ -25,41 +24,40 @@ exports.create = (req, res) => {
 };
 
 exports.findAll((req, res) => {
-    const { name } = req.body;
+    const { loginName } = req.body;
 
-    const condition = name ? { name: { [op.like]: `%${name}%` } } : null;
+    const condition = loginName ? { loginName: { [op.like]: `%${loginName}%` } } : null;
 
-    Products.findAll({where: condition})
+    Users.findAll({where: condition})
     .then((data) => res.status(200).send(data))
-    .catch(err => res.send({
-        res.status(500).send({
-            message: err.message || "something went wrong, while getting products, please try again."
+    .catch(err => res.status(500).send({
+            message: err.message || "something went wrong, while getting Users, please try again."
         })
-    }));
+    );
 });
 
 exports.finOne((req, res) => {
     const { id } = req.params;
 
-    Products.findByPk(id)
+    Users.findByPk(id)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send({
-        message: err.message || `Error getting product id: ${id}.`
+        message: err.message || `Error getting user id: ${id}.`
     }));
 });
 
 exports.update((req, res) => {
     const { id } = req.params.id;
 
-    Products.update(req.body, { where: id })
+    Users.update(req.body, { where: id })
     .then(resp => {
         if (resp === 1) {
             res.send({
-                message: "Product updated successfully"
+                message: "user updated successfully"
             });
         } else {
             res.send({
-                message: `Cannot update product id: ${id}. Please try again`
+                message: `Cannot update user id: ${id}. Please try again`
             });
         }
     })
@@ -71,15 +69,15 @@ exports.update((req, res) => {
 exports.delete((req, res) => {
     const { id } = req.params;
 
-    Products.destroy({ where: { id: id }})
+    Users.destroy({ where: { id: id }})
     .then(resp =>{
         if (resp == 1) {
             res.send({
-                message: "Product was deleted successfully!"
+                message: "User was deleted successfully!"
             });
         } else {
             res.send({
-                message: `Cannot delete product with id=${id}. Please try again.`
+                message: `Cannot delete user with id=${id}. Please try again.`
             });
         }
     })
@@ -91,17 +89,17 @@ exports.delete((req, res) => {
 });
 
 exports.deleteAll((req, res) => {
-    Products.destroy({
+    Users.destroy({
         where: {},
         truncate: false
     })
     .then(resp => {
-        res.send({ message: `${resp} Productss were deleted successfully!` });
+        res.send({ message: `${resp} Users were deleted successfully!` });
     })
     .catch(err => {
         res.status(500).send({
         message:
-            err.message || "Some error occurred while removing all Productss."
+            err.message || "Some error occurred while removing all Users."
         });
     });
 })
