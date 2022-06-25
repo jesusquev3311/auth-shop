@@ -25,7 +25,7 @@ const connection = new Sequelize(
 const db = {
     Sequelize,
     connection,
-    products,
+    products: products(connection, Sequelize),
 };
 
 module.exports = db;

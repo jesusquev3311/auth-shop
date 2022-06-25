@@ -4,6 +4,10 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
+const db = require("./models/index");
+
+// Database Sync
+db.connection.sync();
 
 // setting CORS
 const corsOptions = {
@@ -11,6 +15,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
 
 // Parsing requests
 app.use(bodyParser.urlencoded({extended: false}));
