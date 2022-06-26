@@ -24,7 +24,7 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    const { loginName } = req.body;
+    const { loginName } = req.query;
 
     const condition = loginName ? { loginName: { [op.like]: `%${loginName}%` } } : null;
 

@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const Products = require("../controllers/products.controller");
+//CREATE
+router.post("/products", Products.create);
+
 //GET
 router.get("/products", Products.findAll);
 router.get("/products/:id", Products.findOne);

@@ -2,9 +2,9 @@ module.exports = {
 
     HOST: "localhost",
 
-    USER: "root",
+    USER: "zuz",
 
-    PASSWORD: "123456",
+    PASSWORD: "password",
 
     DB: "auth_shop",
 

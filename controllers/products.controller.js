@@ -3,6 +3,7 @@ const Products = db.products;
 
 exports.create = (req, res) => {
     const { name, type, description } = req.body;
+
     if (!(name && type)) {
         res.status(400).send({
             message: "name and Type are required"
@@ -18,20 +19,20 @@ exports.create = (req, res) => {
     };
 
     Products.create(product)
-    .then(res => res.status(200).send(data))
+    .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send({
         message: err.message || "something wen't wrong, please try again."
     }));
 };
 
 exports.findAll = (req, res) => {
-    const { name } = req.body;
+    const { name } = req.query;
 
     const condition = name ? { name: { [op.like]: `%${name}%` } } : null;
 
-    Products.findAll({where: condition})
+    Products.findAll({ where: condition })
     .then((data) => res.status(200).send(data))
-    .catch(err => res.send({
+    .catch(err => res.status(500).send({
         message: err.message || "something went wrong, while getting products, please try again."
     }));
 };

@@ -23,7 +23,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: false}));
 
 //Routes middlewares
-app.use("/products", usersRoutes);
+app.use(usersRoutes);
 app.use(productsRoutes);
 
 app.get("/", (req, res) => {
