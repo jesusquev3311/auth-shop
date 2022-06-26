@@ -5,6 +5,8 @@ const cors = require("cors");
 
 const app = express();
 const db = require("./models/index");
+const productsRoutes = require("./routes/products.route");
+const usersRoutes = require("./routes/users.route");
 
 // Database Sync
 db.connection.sync();
@@ -20,8 +22,12 @@ app.use(cors(corsOptions));
 // Parsing requests
 app.use(bodyParser.urlencoded({extended: false}));
 
+//Routes middlewares
+app.use(usersRoutes);
+app.use(productsRoutes);
+
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to the application." });
+    res.json({ message: "Welcome to the application server." });
 });
 
 // Sending Not Found requests to 404 view

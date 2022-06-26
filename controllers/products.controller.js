@@ -38,7 +38,7 @@ exports.findAll((req, res) => {
     }));
 });
 
-exports.finOne((req, res) => {
+exports.findOne((req, res) => {
     const { id } = req.params;
 
     Products.findByPk(id)
