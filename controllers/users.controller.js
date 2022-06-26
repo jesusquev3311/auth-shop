@@ -23,7 +23,7 @@ exports.create = (req, res) => {
     }));
 };
 
-exports.findAll((req, res) => {
+exports.findAll = (req, res) => {
     const { loginName } = req.body;
 
     const condition = loginName ? { loginName: { [op.like]: `%${loginName}%` } } : null;
@@ -34,9 +34,9 @@ exports.findAll((req, res) => {
             message: err.message || "something went wrong, while getting Users, please try again."
         })
     );
-});
+};
 
-exports.finOne((req, res) => {
+exports.findOne = (req, res) => {
     const { id } = req.params;
 
     Users.findByPk(id)
@@ -44,9 +44,9 @@ exports.finOne((req, res) => {
     .catch(err => res.status(500).send({
         message: err.message || `Error getting user id: ${id}.`
     }));
-});
+};
 
-exports.update((req, res) => {
+exports.update = (req, res) => {
     const { id } = req.params.id;
 
     Users.update(req.body, { where: id })
@@ -64,9 +64,9 @@ exports.update((req, res) => {
     .catch(err => res.send({
         message: err.message || "someting went wrong. Please try again."
     }))
-});
+};
 
-exports.delete((req, res) => {
+exports.delete = (req, res) => {
     const { id } = req.params;
 
     Users.destroy({ where: { id: id }})
@@ -86,9 +86,9 @@ exports.delete((req, res) => {
             message: err.message || "Something went wron. Please try again."
         });
     });
-});
+};
 
-exports.deleteAll((req, res) => {
+exports.deleteAll = (req, res) => {
     Users.destroy({
         where: {},
         truncate: false
@@ -102,4 +102,4 @@ exports.deleteAll((req, res) => {
             err.message || "Some error occurred while removing all Users."
         });
     });
-})
+};

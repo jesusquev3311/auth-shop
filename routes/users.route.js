@@ -3,14 +3,14 @@ const router = express.Router();
 
 const Users = require("../controllers/users.controller");
 //GET
-router.get("/users", Users.findAll);
-router.get("/users/:id", Users.findOne);
+router.get("/", Users.findAll);
+router.get("/:id", Users.findOne);
 
 //Update
-router.put("/users/:id", Users.update);
+router.put("/:id", Users.update);
 
 //Delete 
-router.delete("/users/:id", Users.delete);
-router.delete("/users", Users.deleteAll);
+router.delete("/:id", Users.delete);
+router.delete("/", Users.deleteAll);
 
-exports.routes = router;
+module.exports = router;

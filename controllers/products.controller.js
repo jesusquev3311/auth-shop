@@ -24,7 +24,7 @@ exports.create = (req, res) => {
     }));
 };
 
-exports.findAll((req, res) => {
+exports.findAll = (req, res) => {
     const { name } = req.body;
 
     const condition = name ? { name: { [op.like]: `%${name}%` } } : null;
@@ -32,13 +32,11 @@ exports.findAll((req, res) => {
     Products.findAll({where: condition})
     .then((data) => res.status(200).send(data))
     .catch(err => res.send({
-        res.status(500).send({
-            message: err.message || "something went wrong, while getting products, please try again."
-        })
+        message: err.message || "something went wrong, while getting products, please try again."
     }));
-});
+};
 
-exports.findOne((req, res) => {
+exports.findOne = (req, res) => {
     const { id } = req.params;
 
     Products.findByPk(id)
@@ -46,9 +44,9 @@ exports.findOne((req, res) => {
     .catch(err => res.status(500).send({
         message: err.message || `Error getting product id: ${id}.`
     }));
-});
+};
 
-exports.update((req, res) => {
+exports.update = (req, res) => {
     const { id } = req.params.id;
 
     Products.update(req.body, { where: id })
@@ -66,9 +64,9 @@ exports.update((req, res) => {
     .catch(err => res.send({
         message: err.message || "someting went wrong. Please try again."
     }))
-});
+};
 
-exports.delete((req, res) => {
+exports.delete = (req, res) => {
     const { id } = req.params;
 
     Products.destroy({ where: { id: id }})
@@ -88,9 +86,9 @@ exports.delete((req, res) => {
             message: err.message || "Something went wron. Please try again."
         });
     });
-});
+};
 
-exports.deleteAll((req, res) => {
+exports.deleteAll = (req, res) => {
     Products.destroy({
         where: {},
         truncate: false
@@ -104,4 +102,4 @@ exports.deleteAll((req, res) => {
             err.message || "Some error occurred while removing all Productss."
         });
     });
-})
+};
