@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+require('dotenv').config()
 
 const app = express();
 const db = require("./models/index");
@@ -10,16 +11,14 @@ const usersRoutes = require("./routes/users.route");
 const basketRoutes = require("./routes/basket.route");
 
 // Database Sync
-try {
-    db.connection.sync();
-} catch (error) {
-    console.error(error)
-}
+db.connection.sync()
+.then(resp => console.log("DB conected ", resp))
+.catch(err => console.error(err));
 
 
 // setting CORS
 const corsOptions = {
-    origin: "localhost:8001",
+    origin: process.env.CORS_ORIGIN,
 };
 
 app.use(cors(corsOptions));

@@ -1,12 +1,12 @@
 module.exports = {
 
-    HOST: "localhost",
+    HOST: process.env.DB_HOST,
 
-    USER: "zuz",
+    USER: process.env.DB_USER,
 
-    PASSWORD: "password",
+    PASSWORD: process.env.DB_PASSWORD,
 
-    DB: "auth_shop",
+    DB: process.env.DB_NAME,
 
     dialect: "mysql",
 

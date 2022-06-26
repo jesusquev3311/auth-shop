@@ -1,7 +1,7 @@
 module.exports = (connection, Sequelize) => {
     const Basket = connection.define("basket", {
-        productID: { type: Sequelize.NUMBER },
-        userID: { type: Sequelize.NUMBER },
+        productID: { type: Sequelize.INTEGER },
+        userID: { type: Sequelize.INTEGER },
     });
 
     return Basket;
