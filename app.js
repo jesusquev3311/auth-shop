@@ -7,9 +7,15 @@ const app = express();
 const db = require("./models/index");
 const productsRoutes = require("./routes/products.route");
 const usersRoutes = require("./routes/users.route");
+const basketRoutes = require("./routes/basket.route");
 
 // Database Sync
-db.connection.sync();
+try {
+    db.connection.sync();
+} catch (error) {
+    console.error(error)
+}
+
 
 // setting CORS
 const corsOptions = {
@@ -25,6 +31,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 //Routes middlewares
 app.use(usersRoutes);
 app.use(productsRoutes);
+app.use(basketRoutes);
 
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to the application server." });

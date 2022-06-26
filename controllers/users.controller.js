@@ -1,8 +1,12 @@
 const db = require("../models");
-const Users = db.users;
+const bcrypt = require('bcrypt');
 
-exports.create = (req, res) => {
+const Users = db.users;
+const saltRounds = 10;
+
+exports.create = async (req, res) => {
     const { loginName, password } = req.body;
+
     if (!(loginName && password)) {
         res.status(400).send({
             message: "loginName and password are required"
@@ -13,14 +17,40 @@ exports.create = (req, res) => {
 
     const user = {
         loginName,
-        password,
+        password
     };
 
-    Users.create(user)
-    .then(res => res.status(200).send(data))
-    .catch(err => res.status(500).send({
-        message: err.message || "something wen't wrong, please try again."
-    }));
+    const checkUser =  await Users.findAll({where: {loginName: user.loginName}});
+
+    if (!(user.loginName && user.password)) {
+        res.status(400).send({
+            message: "Login name and password are required"
+        });
+
+        return
+    }
+
+    if (checkUser.loginName) {
+        res.status(400).send({
+            message: "User already exist. Please login or change loginName"
+        });
+
+        return
+    };
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+        if (err) {
+            res.status(400).send( {message: err.message || "something went wrong"});
+
+            return
+        }
+
+        Users.create({...user, password: hash})
+            .then(data => res.status(200).send(data))
+            .catch(err => res.send({
+                message: err.message || "something wen't wrong, please try again."
+            }));
+    });
+    
 };
 
 exports.findAll = (req, res) => {

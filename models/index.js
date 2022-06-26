@@ -2,6 +2,8 @@ const CONFIG = require("../config/db.config");
 
 const Sequelize = require("sequelize");
 const products = require("./products.model");
+const users = require("./user.model");
+const basket = require("./basket.model");
 
 const { DB, USER, PASSWORD, HOST, dialect, pool } = CONFIG;
 
@@ -26,6 +28,8 @@ const db = {
     Sequelize,
     connection,
     products: products(connection, Sequelize),
+    users: users(connection, Sequelize),
+    basket: basket(connection, Sequelize),
 };
 
 module.exports = db;
