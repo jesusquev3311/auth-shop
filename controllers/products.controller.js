@@ -41,7 +41,14 @@ exports.findOne = (req, res) => {
     const { id } = req.params;
 
     Products.findByPk(id)
-    .then(data => res.status(200).send(data))
+    .then(data => {
+        if (!data) {
+            res.status(404).send({
+                message: `Product id: ${id} - Not Found.`
+            })
+        }
+        res.status(200).send(data)
+    })
     .catch(err => res.status(500).send({
         message: err.message || `Error getting product id: ${id}.`
     }));
