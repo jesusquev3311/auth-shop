@@ -4,6 +4,7 @@
   "description": "Simple Node Auth and MySQL app",
   "main": "app.js",
   "scripts": {
+    "start": "node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

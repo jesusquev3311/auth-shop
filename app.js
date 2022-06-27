@@ -7,24 +7,41 @@ require('dotenv').config()
 const app = express();
 const db = require("./models/index");
 const session = require("express-session");
-const FileStore = require('session-file-store')(session);
 
 const productsRoutes = require("./routes/products.route");
 const usersRoutes = require("./routes/users.route");
 const basketRoutes = require("./routes/basket.route");
 const authRoutes = require("./routes/auth.route");
+const ProductsModel = db.products;
+const Data = require("./utils/constants");
 
 // Database Sync
 db.connection.sync()
-.then(resp => console.log("DB conected ", resp))
+.then((resp) => {
+    console.log("DB conected");
+
+    ProductsModel.findOne({where: {name: "non-empty"}})
+    .then(resp => {
+        if(!resp){
+            console.log("here")
+            ProductsModel.bulkCreate(Data.DUMMY)
+                .then(resp => console.log("success: ", resp))
+                .catch(err => console.error(err));
+        }
+    })
+    .catch(err => console.error(err));
+
+    return resp;
+})
 .catch(err => console.error(err));
 
 // Parsing requests
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 // setting CORS
 const corsOptions = {
-    Credentials: true,
+    Credentials: false,
     origin: process.env.CORS_ORIGIN,
     optionsSuccessStatus: 200
 };
@@ -33,10 +50,14 @@ app.use(cors(corsOptions));
 
 app.use(session({
     name: "session-id",
-    secret: "12345-67890-09876-54321",
-    saveUninitialized: false,
-    resave: false,
-    store: new FileStore()
+    secret: process.env.TOKEN_SECRET,
+    saveUninitialized: true,
+    resave: true,
+    cookie: { 
+        name: "logged",
+        secure: false,
+        maxAge: 6000000
+    }
 }));
 
 //Auth
@@ -44,7 +65,7 @@ app.use("/api", authRoutes);
 
 //user authentification
 function auth(req, res, next) {
-    if (!req.session.loggedin) {
+    if (!req.session.cookie.name === "logged") {
         return res.status(403).send({
             success: false,
             message: "You're not Authorized",
