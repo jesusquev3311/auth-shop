@@ -24,7 +24,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 // setting CORS
 const corsOptions = {
+    Credentials: true,
     origin: process.env.CORS_ORIGIN,
+    optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
