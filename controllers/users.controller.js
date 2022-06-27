@@ -20,7 +20,7 @@ exports.create = async (req, res) => {
         password
     };
 
-    const checkUser =  await Users.findAll({where: {loginName: user.loginName}});
+    const checkUser =  await Users.findOne({where: {loginName: user.loginName}});
 
     if (!(user.loginName && user.password)) {
         res.status(400).send({

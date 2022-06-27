@@ -6,6 +6,9 @@ require('dotenv').config()
 
 const app = express();
 const db = require("./models/index");
+const session = require("express-session");
+const FileStore = require('session-file-store')(session);
+
 const productsRoutes = require("./routes/products.route");
 const usersRoutes = require("./routes/users.route");
 const basketRoutes = require("./routes/basket.route");
@@ -16,6 +19,8 @@ db.connection.sync()
 .then(resp => console.log("DB conected ", resp))
 .catch(err => console.error(err));
 
+// Parsing requests
+app.use(bodyParser.urlencoded({extended: false}));
 
 // setting CORS
 const corsOptions = {
@@ -24,11 +29,31 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Parsing requests
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(session({
+    name: "session-id",
+    secret: "12345-67890-09876-54321",
+    saveUninitialized: false,
+    resave: false,
+    store: new FileStore()
+}));
 
 //Auth
 app.use("/api", authRoutes);
+
+//user authentification
+function auth(req, res, next) {
+    if (!req.session.loggedin) {
+        return res.status(403).send({
+            success: false,
+            message: "You're not Authorized",
+        });
+    } else {
+        next()
+    }
+}
+
+//require Auth
+app.use(auth);
 
 //Routes middlewares
 app.use("/api", usersRoutes);

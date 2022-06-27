@@ -53,8 +53,6 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { loginName, password } = req.body;
-    
-    console.log("login: ", loginName, password);
 
     if (!(loginName && password)){
         return res.status(400).send({
@@ -77,8 +75,27 @@ exports.login = async (req, res) => {
             message: "Wrong password. please check your credentials"
         });
     }
+    req.session.loggedin = true;
+    req.session.login = loginName;
 
-    res.status(200).send({
-        message: `Welcome back ${user.loginName}!`
+    return res.status(200).send({
+        message: `Welcome back ${user.loginName}!`,
+        user: user,
     });
+};
+
+//User Logout
+exports.logout = (req,res) =>{
+    if(req.session){
+        req.session.destroy();
+        res.clearCookie('session-id');
+        res.status(200).send({
+            success: true,
+        })
+    } else {
+        res.status(403).send({
+            success: false,
+            message: 'You\'re Not Logged In',
+        })
+    }
 };

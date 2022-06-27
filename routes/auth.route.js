@@ -9,4 +9,6 @@ router.post("/register", Auth.register);
 //LOGIN
 router.post("/login", Auth.login);
 
+router.get("/logout", Auth.logout);
+
 module.exports = router;
