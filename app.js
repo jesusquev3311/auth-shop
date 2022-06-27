@@ -9,6 +9,7 @@ const db = require("./models/index");
 const productsRoutes = require("./routes/products.route");
 const usersRoutes = require("./routes/users.route");
 const basketRoutes = require("./routes/basket.route");
+const authRoutes = require("./routes/auth.route");
 
 // Database Sync
 db.connection.sync()
@@ -23,14 +24,16 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
 // Parsing requests
 app.use(bodyParser.urlencoded({extended: false}));
 
+//Auth
+app.use("/api", authRoutes);
+
 //Routes middlewares
-app.use(usersRoutes);
-app.use(productsRoutes);
-app.use(basketRoutes);
+app.use("/api", usersRoutes);
+app.use("/api", productsRoutes);
+app.use("/api", basketRoutes);
 
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to the application server." });

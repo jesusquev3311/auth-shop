@@ -50,7 +50,6 @@ exports.create = async (req, res) => {
                 message: err.message || "something wen't wrong, please try again."
             }));
     });
-    
 };
 
 exports.findAll = (req, res) => {
