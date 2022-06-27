@@ -35,9 +35,13 @@ app.use(cors(corsOptions));
 app.use(session({
     name: "session-id",
     secret: process.env.TOKEN_SECRET,
-    saveUninitialized: false,
-    resave: false,
-    store: new FileStore()
+    saveUninitialized: true,
+    resave: true,
+    cookie: { 
+        name: "logged",
+        secure: false,
+        maxAge: 6000000
+    }
 }));
 
 //Auth
@@ -45,7 +49,8 @@ app.use("/api", authRoutes);
 
 //user authentification
 function auth(req, res, next) {
-    if (!req.session.loggedin) {
+    console.log("session: ", req.session)
+    if (!req.session.cookie.name === "logged") {
         return res.status(403).send({
             success: false,
             message: "You're not Authorized",

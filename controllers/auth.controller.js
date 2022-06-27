@@ -77,8 +77,6 @@ exports.login = async (req, res) => {
             message: "Wrong password. please check your credentials"
         });
     }
-    req.session.loggedin = true;
-    req.session.login = loginName;
 
     return res.status(200).send({
         message: `Welcome back ${user.loginName}!`,
