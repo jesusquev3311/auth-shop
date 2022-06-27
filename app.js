@@ -7,16 +7,32 @@ require('dotenv').config()
 const app = express();
 const db = require("./models/index");
 const session = require("express-session");
-const FileStore = require('session-file-store')(session);
 
 const productsRoutes = require("./routes/products.route");
 const usersRoutes = require("./routes/users.route");
 const basketRoutes = require("./routes/basket.route");
 const authRoutes = require("./routes/auth.route");
+const ProductsModel = db.products;
+const Data = require("./utils/constants");
 
 // Database Sync
 db.connection.sync()
-.then(resp => console.log("DB conected ", resp))
+.then((resp) => {
+    console.log("DB conected");
+
+    ProductsModel.findOne({where: {name: "non-empty"}})
+    .then(resp => {
+        if(!resp){
+            console.log("here")
+            ProductsModel.bulkCreate(Data.DUMMY)
+                .then(resp => console.log("success: ", resp))
+                .catch(err => console.error(err));
+        }
+    })
+    .catch(err => console.error(err));
+
+    return resp;
+})
 .catch(err => console.error(err));
 
 // Parsing requests
@@ -49,7 +65,6 @@ app.use("/api", authRoutes);
 
 //user authentification
 function auth(req, res, next) {
-    console.log("session: ", req.session)
     if (!req.session.cookie.name === "logged") {
         return res.status(403).send({
             success: false,
