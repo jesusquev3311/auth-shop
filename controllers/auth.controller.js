@@ -23,11 +23,11 @@ exports.register = async (req, res) => {
 
     
     if (!(user.loginName && user.password)) {
-        res.status(400).send({
+        return res.status(400).send({
             message: "Login name and password are required"
         });
         
-        return
+        
     }
 
     const checkUser =  await Users.findOne({where: {loginName: user.loginName}});
@@ -53,6 +53,8 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { loginName, password } = req.body;
+
+    console.log("body: ", loginName, password);
 
     if (!(loginName && password)){
         return res.status(400).send({
@@ -80,7 +82,6 @@ exports.login = async (req, res) => {
 
     return res.status(200).send({
         message: `Welcome back ${user.loginName}!`,
-        user: user,
     });
 };
 

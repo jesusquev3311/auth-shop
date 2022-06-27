@@ -21,10 +21,11 @@ db.connection.sync()
 
 // Parsing requests
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 // setting CORS
 const corsOptions = {
-    Credentials: true,
+    Credentials: false,
     origin: process.env.CORS_ORIGIN,
     optionsSuccessStatus: 200
 };
@@ -33,7 +34,7 @@ app.use(cors(corsOptions));
 
 app.use(session({
     name: "session-id",
-    secret: "12345-67890-09876-54321",
+    secret: process.env.TOKEN_SECRET,
     saveUninitialized: false,
     resave: false,
     store: new FileStore()
